@@ -1,37 +1,37 @@
 package com.bridgelabz;
 
 /**
- * Standalone enum for weight units (UC9).
- * Responsible for converting to/from base unit (KILOGRAM).
+ * WeightUnit - Standalone enum implementing IMeasurable.
+ * Base unit: KILOGRAM
  */
-public enum WeightUnit {
-    KILOGRAM(1.0),       // base
-    GRAM(0.001),         // 1 g = 0.001 kg
-    POUND(0.453592);     // 1 lb ≈ 0.453592 kg
+public enum WeightUnit implements IMeasurable {
+    KILOGRAM(1.0),
+    GRAM(0.001),
+    POUND(0.453592);
 
-    private final double toKilogramFactor;
+    private final double conversionFactor;
 
-    WeightUnit(double toKilogramFactor) {
-        this.toKilogramFactor = toKilogramFactor;
+    WeightUnit(double conversionFactor) {
+        this.conversionFactor = conversionFactor;
     }
 
-    public double getToKilogramFactor() {
-        return toKilogramFactor;
+    @Override
+    public double getConversionFactor() {
+        return conversionFactor;
     }
 
-    /** Convert a value in this unit to base unit (kilogram). */
+    @Override
     public double convertToBaseUnit(double value) {
-        if (!Double.isFinite(value)) {
-            throw new IllegalArgumentException("Value must be finite");
-        }
-        return value * toKilogramFactor;
+        return value * this.conversionFactor;
     }
 
-    /** Convert a value in base unit (kilogram) to this unit. */
-    public double convertFromBaseUnit(double kgValue) {
-        if (!Double.isFinite(kgValue)) {
-            throw new IllegalArgumentException("Value must be finite");
-        }
-        return kgValue / toKilogramFactor;
+    @Override
+    public double convertFromBaseUnit(double baseValue) {
+        return baseValue / this.conversionFactor;
+    }
+
+    @Override
+    public String getUnitName() {
+        return this.name();
     }
 }
